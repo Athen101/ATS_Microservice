@@ -1,0 +1,35 @@
+service: ats-microservice
+
+provider:
+  name: aws
+  runtime: python3.10
+  timeout: 30  # Increase timeout to 30 seconds
+
+  environment:
+    BREEZY_EMAIL: ${env:BREEZY_EMAIL}
+    BREEZY_PASSWORD: ${env:BREEZY_PASSWORD}
+
+functions:
+
+  getJobs:
+    handler: handler.get_jobs
+    events:
+      - httpApi:
+          path: /jobs
+          method: get
+
+  createCandidate:
+    handler: handler.create_candidate
+    events:
+      - httpApi:
+          path: /candidates
+          method: post
+
+  getApplications:
+    handler: handler.get_applications
+    events:
+      - httpApi:
+          path: /applications
+          method: get
+plugins:
+  - serverless-offline
